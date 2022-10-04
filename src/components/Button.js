@@ -1,16 +1,22 @@
 import React from "react";
-
+// Styles
 import "components/Button.scss";
+// Libraries
+import classNames from 'classnames';
 
 export default function Button(props) {
-   let buttonClass = "button";
-   // Conditional styling if these props were passed down, add the class modifier to it
-   if (props.confirm) buttonClass += " button--confirm";
-   if (props.danger) buttonClass += " button--danger";
+   // Using the classNames library here to conditionally apply className to button
+   let buttonClass = classNames({
+      "button": true, 
+      "button--confirm": props.confirm,
+      "button--danger": props.danger
+   });
 
 
+   // We added the onClick and disabled props here from stories rn in isolated testing
    return (
-      <button className={buttonClass}
+      <button 
+      className={buttonClass}
       onClick={props.onClick}
       disabled={props.disabled}
       >
