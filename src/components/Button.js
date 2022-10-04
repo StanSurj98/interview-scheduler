@@ -13,7 +13,6 @@ export default function Button(props) {
    });
 
 
-   // We added the onClick and disabled props here from stories rn in isolated testing
    return (
       <button 
       className={buttonClass}
