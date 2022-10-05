@@ -12,8 +12,8 @@ export default function InterviewerListItem(props) {
   return (
     <li 
     className={interviewerClass}
-    // as of right now, just setting the id to this particular interviewer when clicked
-    onClick={() => props.setInterviewer(props.id)}>
+    // with the recent change, onClick, we already have a func definition for setInterviewer
+    onClick={props.setInterviewer}>
       <img 
       className="interviewers__item-image"
       src={props.avatar}

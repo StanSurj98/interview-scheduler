@@ -104,10 +104,10 @@ storiesOf("InterviewerListItem", module)
   ))
   .add("Clickable", () => (
     <InterviewerListItem
-      id={interviewer.id}
       name={interviewer.name}
       avatar={interviewer.avatar}
-      setInterviewer={action("setInterviewer")}
+      // Doesn't expect a func that can be passed an id anymore, now just expects no params since id is already included
+      setInterviewer={() => action("setInterviewer")(interviewer.id)}
     />
   ));
 
