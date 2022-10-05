@@ -9,8 +9,10 @@ export default function DayList(props) {
       <DayListItem 
         // When doing this we MUST supply a unique "key" to each item, must be named "key"
         key={day.id}
+        // Keep in mind each "day.something" is the day object from days array
         name={day.name}
         spots={day.spots}
+        // and the "props.day" is the day STATE passed from App.js in our props 
         selected={day.name === props.day} // it is selected when the props.day is its name
         setDay={props.setDay} 
       />
