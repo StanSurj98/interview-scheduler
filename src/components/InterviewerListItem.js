@@ -2,7 +2,7 @@ import React from "react";
 import "components/InterviewerListItem.scss";
 import classNames from "classnames"; // Library for classnames management
 
-export default function InterviewerListItem (props) {
+export default function InterviewerListItem(props) {
   // Conditionally adding classes if props.selected is truthy
   const interviewerClass = classNames({
     "interviewers__item": true,
@@ -23,4 +23,4 @@ export default function InterviewerListItem (props) {
       {props.selected && props.name}
     </li>
   );
-}
+};
