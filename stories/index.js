@@ -10,8 +10,8 @@ import DayListItem from "components/DayListItem";
 import DayList from "components/DayList";
 import InterviewerListItem from "components/InterviewerListItem";
 import InterviewerList from "components/InterviewerList";
-import Appointment from "components/Appointment/"; // defaults to index.js so we can ignore
-
+import Appointment from "components/Appointment/index.js";
+import Header from "components/Appointment/Header";
 
 // <Button />
 storiesOf("Button", module)
@@ -158,4 +158,7 @@ storiesOf("Appoinment", module)
       <Appointment 
         time="12pm"
       />
-    ));
+    ))
+    .add("Header", () => (
+      <Header time="12pm" />
+    ))
