@@ -12,9 +12,9 @@ export default function DayList(props) {
         // Keep in mind each "day.something" is the day object from days array
         name={day.name}
         spots={day.spots}
-        // and the "props.day" is the day STATE passed from App.js in our props 
-        selected={day.name === props.day} // it is selected when the props.day is its name
-        setDay={props.setDay} 
+        // Just changed the names below from previous git commit, to value and onChange
+        selected={day.name === props.value}
+        setDay={props.onChange} 
       />
     );
   });

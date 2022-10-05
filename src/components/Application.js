@@ -38,12 +38,12 @@ export default function Application(props) {
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
           <DayList
-            // the ARRAY of day objects
             days={days}
-            // the SELECTED day STATE
-            day={day}
-            // Just need to pass the function ability to set the day down to its children
-            setDay={setDay}
+            // Changed the name of this prop to make more sense WHY we passed it down
+            value={day}
+            // since we're passing to <ul> component, we need value and onChange anyways
+            onChange={setDay}
+            // !! REMEMBER !! -> these aren't the KEYWORDS "value" and "onChange" event, these are just our props name following the HTML convention!!
           />
         </nav>
         <img

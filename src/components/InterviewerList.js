@@ -13,11 +13,10 @@ export default function InterviewerList(props) {
       key={interviewer.id} 
       name={interviewer.name} 
       avatar={interviewer.avatar}
-      // pass down "selected" prop, truthy WHEN THIS interviewer.id === props.interviewer(#)
-      selected={props.interviewer === interviewer.id}
-      // Another way to pass this function down and not have to pass id twice
-      // now setInterviewer prop is just a func definition, takes w/e event happens
-      setInterviewer={() => props.setInterviewer(interviewer.id)}
+      // just changed name to value since last git commit
+      selected={value === interviewer.id}
+      // also changed to onChange here
+      setInterviewer={() => onChange(interviewer.id)}
       />
     );
   });
