@@ -4,15 +4,17 @@ import { storiesOf } from "@storybook/react";
 import { action } from "@storybook/addon-actions";
 
 import "index.scss";
-// Components
+// ----- All Components -----
 import Button from "components/Button";
 import DayListItem from "components/DayListItem";
 import DayList from "components/DayList";
 import InterviewerListItem from "components/InterviewerListItem";
 import InterviewerList from "components/InterviewerList";
+// Appointment and its views
 import Appointment from "components/Appointment/index.js";
 import Header from "components/Appointment/Header";
 import Empty from "components/Appointment/Empty";
+import Show from "components/Appointment/Show";
 
 // <Button />
 storiesOf("Button", module)
@@ -167,6 +169,14 @@ storiesOf("Appoinment", module)
     ))
     .add("Empty", () => (
       <Empty 
-      onAdd={action("onAdd")} 
+        onAdd={action("onAdd")} 
+      />
+    ))
+    .add("Show", () => (
+      <Show 
+        onEdit={action("onEdit")}
+        onDelete={action("onDelete")}
+        student="Lydia Miller-Jones"
+        interviewer={interviewer} // from above
       />
     ))
