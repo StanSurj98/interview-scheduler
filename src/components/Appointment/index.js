@@ -8,7 +8,7 @@ import Empty from "./Empty";
 export default function Appointment(props) {
   
   return (
-    <Fragment>
+    <article className="appointment">
       <Header time={props.time}/>
       {/* Conditional render if props.interview truthy */}
       {props.interview ? 
@@ -17,7 +17,6 @@ export default function Appointment(props) {
           interviewer={props.interview.interviewer } 
         /> : 
         <Empty />}
-
-    </Fragment>
+    </article>
   );
 };
