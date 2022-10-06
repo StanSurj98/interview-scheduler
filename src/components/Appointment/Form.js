@@ -9,11 +9,23 @@ export default function Form(props) {
   // My DEFAULT is props.{student/interviewer} if truthy or ""/null 
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
 
+  // Function to reset form field and interviewer select
+  const reset = () => {
+    setStudent("");
+    setInterviewer(null);
+  }
+  const cancel = () => {
+    reset();
+    props.onCancel();
+  }
 
   return (
     <main className="appointment__card appointment__card--create">
       <section className="appointment__card-left">
-        <form autoComplete="off">
+        <form 
+          autoComplete="off" 
+          onSubmit={(e) => {e.preventDefault()}} // this prevents default submitting when someone presses Enter or Return
+        >
           <input
             className="appointment__create-input text--semi-bold"
             name="name"
@@ -37,7 +49,7 @@ export default function Form(props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           {/* code goes inside the <Button > */}
-          <Button danger onClick={props.onCancel}>Cancel</Button>
+          <Button danger onClick={cancel}>Cancel</Button>
           <Button confirm onClick={props.onSave}>Save</Button>
         </section>
       </section>
