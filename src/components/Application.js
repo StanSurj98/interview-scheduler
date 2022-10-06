@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "components/Application.scss";
 import DayList from "./DayList";
+import "components/Appointment"
+import Appointment from "components/Appointment";
 
 // Temp Mock Data
 const days = [
@@ -66,6 +68,18 @@ export default function Application(props) {
   const [day, setDay] = useState("Monday");
   // We declare state up here in App.js because later on other components need it as well
 
+  // mapping into <Appointment /> components from appointments object
+  // Object.values(appointments) turns it into an array first, then we map as usual
+  const aptComponents =  Object.values(appointments).map((appointment) => {
+    return (
+      // since our prop names were GOING to be the same as the key names anyways, just spread operator instead
+      <Appointment 
+        key={appointment.id}
+        {...appointment}
+      />
+    );
+  });
+
 
   return (
     <main className="layout">
@@ -93,7 +107,8 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {/* Replace this with the schedule elements durint the "The Scheduler" activity. */}
+        {aptComponents}
+        <Appointment key="last" time="5pm" />
       </section>
     </main>
   );
