@@ -20,6 +20,7 @@ export default function Application(props) {
     day: "Monday",
     days: [],
     appointments: {}, // this is going to break temporarily since we have our fake data above
+    interviewers: {},
   });
 
   
@@ -31,23 +32,27 @@ export default function Application(props) {
   useEffect(() => {
     // Using Promise.all([array of async axios calls]).then(resolve ALL).catch(ANY error)
     Promise.all([
-      // don't put in the http://localhost:port (we would never use this IRL)
       axios.get(`/api/days`),
-      axios.get(`/api/appointments`)
+      axios.get(`/api/appointments`),
+      axios.get(`/api/interviewers`)
     ])
     .then(response => {
       // console.log(response);
       // console.log("Days api response data: ", response[0].data);
       // console.log("Appointments api response data: ", response[1].data);
+      // console.log("Interviewers data: ", response[2].data);
+
+
       // Making variables here that match the state variables up top
       const days = response[0].data;
       const appointments = response[1].data;
+      const interviewers = response[2].data;
       // Setting state simultaneously, when ALL the promises resolved, to new days/apts 
-      setState(prev => ({...prev, days, appointments}));
+      setState(prev => ({...prev, days, appointments, interviewers}));
     })
     .catch(error => {console.log("There is an error: \n", error)});
   }, [])
-  // Now with all our new appointments data, we can use our selector helper we built
+
 
   // 
   // ----- setState Functions -----
@@ -63,9 +68,12 @@ export default function Application(props) {
 
   // takes the current state object (which is updated with our axios requests) and for the current state.day (which is selected in DayList), format the appointments objects
   const dailyAppointments = getAppointmentsForDay(state, state.day);
+  console.log(dailyAppointments);
 
   // mapping <Appointment /> from dailyAppointments array of appointment objects returned by our selector helper
-  const aptComponents =  dailyAppointments.map((appointment) => {
+  const schedule =  dailyAppointments.map((appointment) => {
+    // const interview = getInterview(state, appointment.interview)
+
     return (
       <Appointment 
         key={appointment.id}
@@ -105,7 +113,7 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {aptComponents}
+        {schedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>

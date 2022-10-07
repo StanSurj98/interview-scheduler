@@ -1,4 +1,4 @@
-const getAppointmentsForDay = (state, dayArg) => {
+export const getAppointmentsForDay = (state, dayArg) => {
   // Refactored with help from Gary Jipp
   const results = [];
   // 1. find the day obj
@@ -16,4 +16,18 @@ const getAppointmentsForDay = (state, dayArg) => {
 
 };
 
-export default getAppointmentsForDay;
+export const getInterview = (state, interview) => {
+  // Edge: if no interview object, return null
+  if (!interview) return null;
+  // Interview is an object, {student: "string", interviewer: number (id)}
+  // 1. look at interviewer id
+  const id = interview.interviewer;
+  // 2. find the interviewer object at that id
+  const interviewerObj = state.interviewers[id]
+  // 3. return an object with student and interviewer
+  return {
+    student: interview.student,
+    interviewer: {...interviewerObj}
+  }
+
+};
