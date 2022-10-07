@@ -26,7 +26,9 @@ export const getInterview = (state, interview) => {
   const interviewerObj = state.interviewers[id]
   // 3. return an object with student and interviewer
   return {
+    // whereas interview.student is a string primitive, so this is ref by VALUE already
     student: interview.student,
+    // Passing interviewer OBJECT by VALUE, that's why we use spread to make copy
     interviewer: {...interviewerObj}
   }
 
