@@ -51,6 +51,10 @@ import Appointment from "components/Appointment";
 
 
 export default function Application(props) {
+  // 
+  // ----- State and other Variables -----
+  // 
+  
   // Managing multiple states inside an object
   const [state, setState] = useState({
     day: "Monday",
@@ -59,6 +63,10 @@ export default function Application(props) {
   });
 
   const dailyAppointments = [];
+
+  // 
+  // ----- setState Functions -----
+  // 
 
   // Creating new setDay function with the object above
   const setDay = day => setState({ ...state, day });
@@ -71,6 +79,9 @@ export default function Application(props) {
   };
   // Take the array of objects in "state" obj, which is under "days":[] and replace it with the func argument
 
+  // 
+  // ----- Axios & Side Effects-----
+  // 
 
   // Axios GET to /api/days ONLY once on initial render (dep: [])
   useEffect(() => {
@@ -83,6 +94,10 @@ export default function Application(props) {
       .catch(error => {console.log("There is an error: \n", error)});
   }, [])
 
+
+  // 
+  // ----- JSX -----
+  // 
 
   // mapping into <Appointment /> components from appointments object 
   const aptComponents =  Object.values(appointments).map((appointment) => {
