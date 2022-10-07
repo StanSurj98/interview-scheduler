@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+// Styles
 import "components/Application.scss";
+// Components
 import DayList from "./DayList";
 import "components/Appointment"
 import Appointment from "components/Appointment";
+
 
 // Temp Mock Data
 const days = [
@@ -64,15 +68,11 @@ const appointments = {
 
 
 export default function Application(props) {
-  // Destructuring the state and setState from useState hook, default day selected "Monday"
-  const [day, setDay] = useState("Monday");
-  // We declare state up here in App.js because later on other components need it as well
+  const [days, setDays] = useState([]);
 
   // mapping into <Appointment /> components from appointments object
-  // Object.values(appointments) turns it into an array first, then we map as usual
   const aptComponents =  Object.values(appointments).map((appointment) => {
     return (
-      // since our prop names were GOING to be the same as the key names anyways, just spread operator instead
       <Appointment 
         key={appointment.id}
         {...appointment}
