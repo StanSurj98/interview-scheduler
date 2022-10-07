@@ -1,4 +1,4 @@
-export const getAppointmentsForDay = (stateObj, dayArg) => {
+const getAppointmentsForDay = (stateObj, dayArg) => {
   // If days array is empty, return empty array
   if (stateObj.days.length === 0) return [];
 
@@ -13,11 +13,12 @@ export const getAppointmentsForDay = (stateObj, dayArg) => {
     }
   }
 
-
+  // If appoinmentIDs array is filled with nums representing appointments id, we map an array of appointment objects that match that id
   const results = appointmentIDs.map((id) => {
     return stateObj.appointments[id];
   });
 
+  // returning an array of appointment objects
   return results;
 
   // Using .find() worked out with travis
@@ -37,3 +38,5 @@ export const getAppointmentsForDay = (stateObj, dayArg) => {
 
   //   return appointmentArray;
 };
+
+export default getAppointmentsForDay;

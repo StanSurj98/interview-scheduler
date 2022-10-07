@@ -6,48 +6,8 @@ import "components/Application.scss";
 import DayList from "./DayList";
 import "components/Appointment"
 import Appointment from "components/Appointment";
-
-
-
-// Temp interview data
-// const appointments = {
-//   "1": {
-//     id: 1,
-//     time: "12pm",
-//   },
-//   "2": {
-//     id: 2,
-//     time: "1pm",
-//     interview: {
-//       student: "Lydia Miller-Jones",
-//       interviewer:{
-//         id: 3,
-//         name: "Sylvia Palmer",
-//         avatar: "https://i.imgur.com/LpaY82x.png",
-//       }
-//     }
-//   },
-//   "3": {
-//     id: 3,
-//     time: "2pm",
-//   },
-//   "4": {
-//     id: 4,
-//     time: "3pm",
-//     interview: {
-//       student: "Archie Andrews",
-//       interviewer:{
-//         id: 4,
-//         name: "Cohana Roy",
-//         avatar: "https://i.imgur.com/FK8V841.jpg",
-//       }
-//     }
-//   },
-//   "5": {
-//     id: 5,
-//     time: "4pm",
-//   }
-// };
+// Helpers
+import getAppointmentsForDay from "../helpers/selectors";
 
 
 export default function Application(props) {
@@ -62,7 +22,7 @@ export default function Application(props) {
     appointments: {}, // this is going to break temporarily since we have our fake data above
   });
 
-  const dailyAppointments = [];
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   // 
   // ----- setState Functions -----
@@ -73,11 +33,6 @@ export default function Application(props) {
   // What this does, uses spread operator on state object, says:
   // "Give me all the properties of state, but update the one that matches day argument in this func"
 
-  // Same with setDays
-  const setDays = (days) => { 
-    setState(prev => ({...prev, days}));
-  };
-  // Take the array of objects in "state" obj, which is under "days":[] and replace it with the func argument
 
   // 
   // ----- Axios & Side Effects-----
@@ -85,22 +40,31 @@ export default function Application(props) {
 
   // Axios GET to /api/days ONLY once on initial render (dep: [])
   useEffect(() => {
-    axios.get(`http://localhost:8001/api/days`)
-      .then(response => {
-        console.log(response);
-        // setDays affected from combining states into object
-        setDays(response.data)
-      })
-      .catch(error => {console.log("There is an error: \n", error)});
+    // Using Promise.all([array of async axios calls]).then(resolve ALL).catch(ANY error)
+    Promise.all([
+      axios.get(`http://localhost:8001/api/days`),
+      axios.get(`http://localhost:8001/api/appointments`)
+    ])
+    .then(response => {
+      // console.log(response);
+      // console.log("Days api response data: ", response[0].data);
+      // console.log("Appointments api response data: ", response[1].data);
+      // Making variables here that match the state variables up top
+      const days = response[0].data;
+      const appointments = response[1].data;
+      // Setting state simultaneously, when ALL the promises resolved, to new days/apts 
+      setState(prev => ({...prev, days, appointments}));
+    })
+    .catch(error => {console.log("There is an error: \n", error)});
   }, [])
-
+  // Now with all our new appointments data, we can use our selector helper we built
 
   // 
   // ----- JSX -----
   // 
 
-  // mapping into <Appointment /> components from appointments object 
-  const aptComponents =  Object.values(appointments).map((appointment) => {
+  // mapping <Appointment /> from dailyAppointments array of appointment objects returned by our selector helper
+  const aptComponents =  dailyAppointments.map((appointment) => {
     return (
       <Appointment 
         key={appointment.id}
