@@ -22,18 +22,7 @@ export default function Application(props) {
     appointments: {}, // this is going to break temporarily since we have our fake data above
   });
 
-  const dailyAppointments = getAppointmentsForDay(state, state.day);
-
-  // 
-  // ----- setState Functions -----
-  // 
-
-  // Creating new setDay function with the object above
-  const setDay = day => setState({ ...state, day });
-  // What this does, uses spread operator on state object, says:
-  // "Give me all the properties of state, but update the one that matches day argument in this func"
-
-
+  
   // 
   // ----- Axios & Side Effects-----
   // 
@@ -42,8 +31,9 @@ export default function Application(props) {
   useEffect(() => {
     // Using Promise.all([array of async axios calls]).then(resolve ALL).catch(ANY error)
     Promise.all([
-      axios.get(`http://localhost:8001/api/days`),
-      axios.get(`http://localhost:8001/api/appointments`)
+      // don't put in the http://localhost:port (we would never use this IRL)
+      axios.get(`/api/days`),
+      axios.get(`/api/appointments`)
     ])
     .then(response => {
       // console.log(response);
@@ -60,8 +50,19 @@ export default function Application(props) {
   // Now with all our new appointments data, we can use our selector helper we built
 
   // 
-  // ----- JSX -----
+  // ----- setState Functions -----
   // 
+  
+  // Creating new setDay function for the object above
+  // This says, update the state.day property to the day argument passed in this fn
+  const setDay = day => setState({ ...state, day });
+
+
+  
+
+
+  // takes the current state object (which is updated with our axios requests) and for the current state.day (which is selected in DayList), format the appointments objects
+  const dailyAppointments = getAppointmentsForDay(state, state.day);
 
   // mapping <Appointment /> from dailyAppointments array of appointment objects returned by our selector helper
   const aptComponents =  dailyAppointments.map((appointment) => {
@@ -73,6 +74,10 @@ export default function Application(props) {
     );
   });
 
+
+  // 
+  // ----- JSX Template -----
+  // 
 
   return (
     <main className="layout">
