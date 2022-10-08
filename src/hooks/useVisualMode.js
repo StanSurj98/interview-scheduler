@@ -1,36 +1,29 @@
 import { useState } from 'react';
 
 const useVisualMode = (initial) => {
-  // Takes an initial mode, sets the state to it
-  const [mode, setMode] = useState(initial);
   // We need a state that is an array to keep track of all modes we've been through. call it history
   const [history, setHistory] = useState([initial]);
 
 
-  // Adds nextMode to history state array, important that we useState for this too, so it persists
-  const transition = (nextMode, replace = false) => {
-    // If replace is truthy
-    if (replace) {
-      setMode(prev => nextMode);
-    } else {
-      // grabbing whole copy of history array, add on the current mode
-      setHistory(prev => [...prev, mode]);
-      // then setMode from previous state, to next mode
-      setMode(prev => nextMode);
-    }
+  // Adds mode to history array, important that we useState for this too, so it persists
+  const transition = (mode, replace = false) => {
+    // if replace truthy, take the LAST element in history array with prev.slice... and replace that with the mode we're transitioning to 
+    // REMINDER - .slice(start, ENDS AND NOT INCLUDES), meaning we want a copy here WITHOUT the last item, then add the mode
+    setHistory(prev => replace ? [...prev.slice(0, prev.length - 1), mode] : [...prev, mode]);
+    // OTHERWISE if replace is false, just add on the mode to the end of the array
   };
 
   const back = () => {
     // Limit, don't allow it to go back past the initial mode in our history
-    if (history.length === 1) return [initial];
-    // using .pop() returns the last element REMOVING it from the history array - we mutate it
-    setMode(prev => history.pop())
-    // then making sure we update history state from prev to this (do we need to? since it's mutating?)
-    setHistory(prev => history)
+    if (history.length < 2) return;
+    setHistory(prev => [...prev.slice(0, history.length - 1)]);
+    // We just setHistory array to NOT include the previous last item in the array
+    // AGAIN - .slice(starts, ENDS and NOT include)
   }
 
-  // Ultimately, we want to return an object with that mode as its property
-  return { mode: mode, transition, back }; // return as key:val so that tests/components can access it later
+  // ULTIMATELY, always return mode as the absolute last element in the history array
+  // return as key:val so that tests/components can access it later
+  return { mode: history[history.length - 1], transition, back }; 
 };
 
 export default useVisualMode;
