@@ -8,11 +8,16 @@ const useVisualMode = (initial) => {
 
 
   // Adds nextMode to history state array, important that we useState for this too, so it persists
-  const transition = (nextMode) => {
-    // grabbing whole copy of history array, add on the current mode
-    setHistory(prev => [...prev, mode]);
-    // then setMode from previous state, to next mode
-    setMode(prev => nextMode);
+  const transition = (nextMode, replace = false) => {
+    // If replace is truthy
+    if (replace) {
+      setMode(prev => nextMode);
+    } else {
+      // grabbing whole copy of history array, add on the current mode
+      setHistory(prev => [...prev, mode]);
+      // then setMode from previous state, to next mode
+      setMode(prev => nextMode);
+    }
   };
 
   const back = () => {
