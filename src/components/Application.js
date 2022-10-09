@@ -7,7 +7,7 @@ import DayList from "./DayList";
 import "components/Appointment"
 import Appointment from "components/Appointment";
 // Helpers
-import { getAppointmentsForDay, getInterview } from "../helpers/selectors";
+import { getAppointmentsForDay, getInterview, getInterviewersForDay } from "../helpers/selectors";
 
 
 export default function Application(props) {
@@ -23,6 +23,7 @@ export default function Application(props) {
     interviewers: {},
   });
 
+  console.log("STATES AT APP.JS\n\n\n", state )
   
   // 
   // ----- Axios & Side Effects-----
@@ -68,7 +69,11 @@ export default function Application(props) {
 
   // takes the current state object (which is updated with our axios requests) and for the current state.day (which is selected in DayList), format the appointments objects
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-  console.log(dailyAppointments);
+  // console.log(dailyAppointments);
+
+  // interviewers for day
+  const dailyInterviewers = getInterviewersForDay(state, state.day);
+  console.log("INTERVIEWERS FOR DAY\n\n", dailyInterviewers);
 
   // mapping <Appointment /> from dailyAppointments array of appointment objects returned by our selector helper
   const schedule =  dailyAppointments.map((appointment) => {
@@ -80,6 +85,7 @@ export default function Application(props) {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={dailyInterviewers}
       />
     );
   });
