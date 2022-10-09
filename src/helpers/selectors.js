@@ -33,3 +33,21 @@ export const getInterview = (state, interview) => {
   }
 
 };
+
+export const getInterviewersForDay = (state, dayArg) => {
+  // Find the correct day
+  const day = state.days.find(d => d.name === dayArg)
+  if (!day) return [];
+  
+  const result = [];
+
+  // In the correct day, loop through the ids of interviewers array
+  console.log(day.interviewers);
+  for (const id of day.interviewers) {
+    // for each id, push into our array the interviewer object
+    result.push(state.interviewers[id]);
+  }
+
+  return result;
+
+};
