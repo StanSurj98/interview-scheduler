@@ -16,7 +16,7 @@ const useVisualMode = (initial) => {
   const back = () => {
     // Limit, don't allow it to go back past the initial mode in our history
     if (history.length < 2) return;
-    setHistory(prev => [...prev.slice(0, history.length - 1)]);
+    setHistory(prev => [...prev.slice(0, prev.length - 1)]);
     // We just setHistory array to NOT include the previous last item in the array
     // AGAIN - .slice(starts, ENDS and NOT include)
   }
