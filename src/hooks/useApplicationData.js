@@ -4,7 +4,7 @@ import axios from "axios";
 // 
 // ----- Custom Hook for Managing State -----
 // 
-export default function useApplicationData() {
+const useApplicationData = () => {
   // Managing multiple states inside an object
   const [state, setState] = useState({
     day: "Monday",
@@ -106,3 +106,5 @@ export default function useApplicationData() {
     cancelInterview
   }
 };
+
+export default useApplicationData;
