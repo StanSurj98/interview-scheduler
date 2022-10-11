@@ -1,9 +1,9 @@
-import {useState, useEffect} from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
-// 
+//
 // ----- Custom Hook for Managing State -----
-// 
+//
 const useApplicationData = () => {
   // Managing multiple states inside an object
   const [state, setState] = useState({
@@ -12,7 +12,6 @@ const useApplicationData = () => {
     appointments: {},
     interviewers: {},
   });
-
 
   //
   // ----- Axios & API useEffect-----
@@ -35,10 +34,12 @@ const useApplicationData = () => {
         setState((prev) => ({ ...prev, days, appointments, interviewers }));
       })
       .catch((error) => {
-        console.log("There was an error fetching days, apts or interviewers: \n", error);
+        console.log(
+          "There was an error fetching days, apts or interviewers: \n",
+          error
+        );
       });
   }, []);
-
 
   //
   // ----- Functions for Updating or Setting States -----
@@ -47,6 +48,32 @@ const useApplicationData = () => {
   // Update the state.day property to the selected day in <DayList />
   const setDay = (day) => setState({ ...state, day });
 
+  // Takes in the updated state.appointments (during booking/cancelling)
+  const updateSpots = (stateAppointments) => {
+    // finds the current day through the state.days array, matching names
+    const currentDay = state.days.find((day) => day.name === state.day);
+
+    // Look through the appointments ids for the current day
+    const nullInterviews = currentDay.appointments.filter((id) => {
+      // filter to an array where appointments at this id has null interviews
+      return stateAppointments[id].interview === null;
+    });
+    // update spots for current day to the num of null interviews this day
+    currentDay.spots = nullInterviews.length;
+
+    // update copy of state.days array, returning currentDay with new spots number
+    const days = [...state.days].map((day) => {
+      if (day.name === state.day) {
+        return currentDay;
+      } else {
+        // if it's not the currentDay, keep the other days the same
+        return day;
+      }
+    });
+
+    // set the state of days to be the new array of days with updated spots
+    setState((prev) => ({ ...prev, days }));
+  };
 
   // Updates appointment info with new interview object from <Form /> entry
   const bookInterview = (id, interview) => {
@@ -64,14 +91,20 @@ const useApplicationData = () => {
     };
 
     // But FIRST => request the DB to update the data via PUT/POST/PATCH, etc.
-    return axios
-      // !! REMEMBER !! must { encapsulate } the data body we are updating here
-      .put(`/api/appointments/${id}`, { interview })
-      .then(() => {
-        // ON SUCCESS => then setState our appointments with the changes above
-        setState({ ...state, appointments });
-      })
-      // ALSO => purposefully left out the .catch() here for <Appointment /> level to render the correct <Error /> if there was one
+    return (
+      axios
+        // !! REMEMBER !! must { encapsulate } the data body we are updating here
+        .put(`/api/appointments/${id}`, { interview })
+        .then(() => {
+          // ON SUCCESS => then setState our appointments with the changes above
+          setState({ ...state, appointments });
+        })
+        .then(() => {
+          // when appointments have updated server && client side, updateSpots
+          updateSpots(appointments);
+        })
+    );
+    // ALSO => purposefully left out the .catch() here for <Appointment /> level to render the correct <Error /> if there was one
   };
 
   // Deletes interview appointment, gets its interview object from <Appointment />
@@ -94,17 +127,20 @@ const useApplicationData = () => {
         // similarly, only on success we update the appointments with new null
         setState({ ...state, appointments });
       })
-      // left out .catch() for <Appointment /> to handle if <Error /> needs shown
+      .then(() => {
+        // when appointments updated server && client side, updateSpots too
+        updateSpots(appointments);
+      });
+    // left out .catch() for <Appointment /> to handle if <Error /> needs shown
   };
-
 
   // ULTIMATELY => This hook returns all state management logic for App.js
   return {
-    state, 
-    setDay, 
-    bookInterview, 
-    cancelInterview
-  }
+    state,
+    setDay,
+    bookInterview,
+    cancelInterview,
+  };
 };
 
 export default useApplicationData;
