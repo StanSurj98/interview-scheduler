@@ -15,6 +15,7 @@ const SAVING = "SAVING";
 const CREATE = "CREATE";
 const CONFIRM = "CONFIRM";
 const DELETING = "DELETING";
+const EDIT = "EDIT";
 
 // We wrote this component inside the Appointment/ directory because it will have lots of child components later, and index.js is used to import easily as a default path
 export default function Appointment(props) {
@@ -88,7 +89,20 @@ export default function Appointment(props) {
           student={props.interview.student} 
           interviewer={props.interview.interviewer} 
           onDelete={() => transition(CONFIRM)}
+          onEdit={() => transition(EDIT)}
         /> 
+      )}
+      
+      
+      {/* EDIT */}
+      {mode === EDIT && (
+        <Form 
+          interviewers={props.interviewers}
+          student={props.interview.student}
+          interviewer={props.interview.interviewer.id} 
+          onSave={save}
+          onCancel={back}
+        />
       )}
 
 
