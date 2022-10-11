@@ -32,6 +32,9 @@ export default function Appointment(props) {
       interviewer,
     };
 
+    // Using the saving loader before the AXIOS req gets sent and returned ("Pessimistic" update)
+    transition(SAVING);
+
     // Once our Axios PUT req finishes, we transition mode to SHOW and re-render 
     props.bookInterview(props.id, interview)
       .then(() => {
@@ -46,7 +49,8 @@ export default function Appointment(props) {
       <Header time={props.time}/>
       {/* Conditional render on modes with useVisualMode */}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} /> }
-      {/* SHOW */}
+      {mode === SAVING && <Status message={"Booking interview..."} />}
+      {/* SHOW */} 
       {mode === SHOW && (
         <Show 
           student={props.interview.student} 
