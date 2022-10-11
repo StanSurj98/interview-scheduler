@@ -41,11 +41,6 @@ export default function Application(props) {
       axios.get(`/api/interviewers`),
     ])
       .then((response) => {
-        // console.log(response);
-        // console.log("Days api response data: ", response[0].data);
-        // console.log("Appointments api response data: ", response[1].data);
-        // console.log("Interviewers data: ", response[2].data);
-
         // Making variables here that match the state variables up top
         const days = response[0].data;
         const appointments = response[1].data;
@@ -62,43 +57,46 @@ export default function Application(props) {
   // ----- setState Functions -----
   //
 
-  // Creating new setDay function for the object above
-  // This says, update the state.day property to the day argument passed in this fn
+  // Update the state.day property to the day argument passed in this fn
   const setDay = (day) => setState({ ...state, day });
 
   // takes the current state object (which is updated with our axios requests) and for the current state.day (which is selected in DayList), format the appointments objects
   const dailyAppointments = getAppointmentsForDay(state, state.day);
   // console.log(dailyAppointments);
 
-  // interviewers for day
+  // interviewers for day to select from in <Form />
   const dailyInterviewers = getInterviewersForDay(state, state.day);
-  // console.log("INTERVIEWERS FOR DAY\n\n", dailyInterviewers);
 
-  // bookInterview - saving/UPDATING appointment info with new interview object from <Form /> entry
+  // 
+  // ----- State Update w/ PUT to API server -----
+  // 
+
+  // bookInterview - UPDATING appointment info with new interview object from <Form /> onSave()
   const bookInterview = (id, interview) => {
-    // Make copies of the current appointment details BUT with new interview data
+    // Start updating the STATE object from the lowest level upwards (since it's a nested object)
     const appointment = {
-      // copying details about the appointments at this particular id
       ...state.appointments[id],
-      // copy of the new interview object being passed up from the <Form /> onSave()
+      // Lowest level is the new interview object from <Form /> onSave()
       interview: { ...interview },
     };
 
-    // Moving up a level from appointment is the appointment(s) object that holds all appointment items, we need to update this as well incrementally using spreads at each level
+    // Moving up a level from appointment is the appointment(s) key for the state object
     const appointments = {
       ...state.appointments,
       [id]: appointment,
     };
 
-    // Ultimately we want to call setState() here to update the overall STATE object - notice how we went from the lowest level of the new state data all the way up to the top
-    // taking a copy of the state object keys, updating the keys of "appointments"
-    setState({
-      ...state,
-      appointments,
-    });
+
+    // Ultimately want to setState() here to update the overall STATE object but AFTER a PUT req
+    axios.put(`/api/appointments/${id}`, {interview})
+      .then(() => {
+        setState({...state, appointments})
+      })
+      .catch(e => console.log("error at line100 application.js", e));
+
   };
 
-  // mapping <Appointment /> from dailyAppointments array of appointment objects returned by our selector helper
+  // Mapping each <Appointment /> from dailyAppointments array of appointment objects returned by our selector helper
   const schedule = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
 

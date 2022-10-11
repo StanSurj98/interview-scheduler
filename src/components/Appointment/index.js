@@ -32,6 +32,7 @@ export default function Appointment(props) {
       interviewer,
     };
 
+    // Once our Axios PUT req finishes, we transition mode to SHOW and re-render 
     props.bookInterview(props.id, interview)
       .then(() => {
         transition(SHOW);
