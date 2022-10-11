@@ -21,9 +21,7 @@ export default function Form(props) {
 
   // Temp func for onSave right now
   const save = () => {
-    // setStudent(student)
-    // setInterviewer(interviewer)
-    props.onSave();
+    props.onSave(student, interviewer);
   }
 
 

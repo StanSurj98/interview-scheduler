@@ -42,7 +42,7 @@ export const getInterviewersForDay = (state, dayArg) => {
   const result = [];
 
   // In the correct day, loop through the ids of interviewers array
-  console.log(day.interviewers);
+  // console.log(day.interviewers);
   for (const id of day.interviewers) {
     // for each id, push into our array the interviewer object
     result.push(state.interviewers[id]);
