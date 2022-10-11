@@ -49,6 +49,7 @@ export default function Appointment(props) {
       <Header time={props.time}/>
       {/* Conditional render on modes with useVisualMode */}
       {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} /> }
+      {/* SAVING */}
       {mode === SAVING && <Status message={"Booking interview..."} />}
       {/* SHOW */} 
       {mode === SHOW && (

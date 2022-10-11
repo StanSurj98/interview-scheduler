@@ -88,7 +88,8 @@ export default function Application(props) {
 
 
     // Ultimately want to setState() here to update the overall STATE object but AFTER a PUT req
-    axios.put(`/api/appointments/${id}`, {interview})
+    // !! REMEMBER !! must wrap the data body in the form you need, in this case an object with key "interview" so we can just encapsulate it with {...} like this
+    axios.put(`/api/appointments/${id}`, { interview })
       .then(() => {
         setState({...state, appointments})
       })
