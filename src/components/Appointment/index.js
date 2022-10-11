@@ -7,6 +7,7 @@ import Form from "./Form";
 import Status from "./Status";
 import Confirm from "./Confirm";
 import useVisualMode from "hooks/useVisualMode";
+import Error from "./Error";
 
 // Constants for Modes that we will need
 const EMPTY = "EMPTY";
@@ -16,6 +17,8 @@ const CREATE = "CREATE";
 const CONFIRM = "CONFIRM";
 const DELETING = "DELETING";
 const EDIT = "EDIT";
+const ERROR_SAVE = "ERROR_SAVE";
+const ERROR_DELETE = "ERROR_DELETE";
 
 // We wrote this component inside the Appointment/ directory because it will have lots of child components later, and index.js is used to import easily as a default path
 export default function Appointment(props) {
@@ -47,7 +50,10 @@ export default function Appointment(props) {
       .then(() => {
         transition(SHOW);
       })
-      .catch((e) => console.log("Error at line 49 in bookInterview: ", e))
+      .catch((e) => {
+        console.log("An error occurred with Axios during saving");
+        transition(ERROR_SAVE, true);
+      })
   }
 
   const deleteInterview = () => {
@@ -59,7 +65,7 @@ export default function Appointment(props) {
     }
     
     // For <Status /> Loading when confirming the deletion
-    transition(DELETING);
+    transition(DELETING, true);
 
     // Call on cancelInterview() UP in app.js parent, do an axios.delete and come back to us
     props.cancelInterview(props.id, interview)
@@ -67,7 +73,10 @@ export default function Appointment(props) {
         // if all goes well, return the mode === EMPTY
         transition(EMPTY);
       })
-      .catch((e) => console.log("Error at line 68 deleteInterview: ", e))
+      .catch((e) => {
+        console.log("Error at line 68 deleteInterview: ", e)
+        transition(ERROR_DELETE, true)
+      })
   }
 
 
@@ -131,6 +140,14 @@ export default function Appointment(props) {
         <Status 
           message={"Deleting interview..."} 
         />
+      )}
+
+      {/* ERROR */}
+      {mode === ERROR_SAVE && (
+        <Error onClose={back} message={"There was an error during saving... sorry!"} />
+      )}
+      {mode === ERROR_DELETE && (
+        <Error onClose={back} message={"There was an error during deletion"} />
       )}
 
     </article>

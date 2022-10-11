@@ -93,7 +93,6 @@ export default function Application(props) {
       .then(() => {
         setState({ ...state, appointments });
       })
-      .catch((e) => console.log("error at line100 application.js", e));
   };
 
   //
@@ -127,13 +126,7 @@ export default function Application(props) {
         console.log("Axios.delete is successful for this interview");
         // when axios delete is successful, update State with setState, keep all details BUT update the appointments property with the changes above
         setState({ ...state, appointments });
-        console.log(state.appointments);
       })
-      .catch((e) =>
-        console.log(
-          "Something went wrong with axios, line 133, cancelInterview()"
-        )
-      );
   };
 
   // Mapping each <Appointment /> from dailyAppointments array of appointment objects returned by our selector helper
