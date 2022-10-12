@@ -13,6 +13,7 @@ import {
   fireEvent,
   getByPlaceholderText,
   queryAllByTestId,
+  queryByAltText,
 } from "@testing-library/react";
 
 import Application from "components/Application";
@@ -81,19 +82,21 @@ describe("Application Tests", () => {
     const { container, debug } = render(<Application />);
 
     // wait for init render until the archie appointment appears on screen
-    await waitForElement(() => queryByText(container, "Archie Cohen"));
+    await waitForElement(() => getByText(container, "Archie Cohen"));
 
     // access this specific appointment <Show /> component
-    const appointment = getAllByTestId(container, "appointment").find(appointment => queryByText(appointment, "Archie Cohen"));
+    const appointment = getAllByTestId(container, "appointment").find(
+      appointment => queryByText(appointment, "Archie Cohen"
+    ));
 
     // click on delete for that particular appointment
-    fireEvent.click(getByAltText(appointment, "Delete"));
+    fireEvent.click(queryByAltText(appointment, "Delete"));
     
     // expect that the confim box shows up
     expect(getByText(appointment, /do you want to delete*/i)).toBeInTheDocument();
 
     // click confirm button which will trigger axios, update our mock for delete
-    fireEvent.click(getByText(appointment, "Confirm"));
+    fireEvent.click(queryByText(appointment, "Confirm"));
 
     // we should now see a DELETING mode, checking for "Deleting interview..."
     expect(getByText(appointment, /deleting interview.../i)).toBeInTheDocument();
@@ -105,4 +108,6 @@ describe("Application Tests", () => {
     const day = getAllByTestId(container, "day").find( day => queryByText(day, "Monday"));
     expect(queryByText(day, /2 spots remaining/i)).toBeInTheDocument();
   });
+
+
 });
