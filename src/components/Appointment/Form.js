@@ -10,11 +10,15 @@ export default function Form(props) {
   // error state for form validation, empty at start or pop up msg
   const [error, setError] = useState("")
 
+  const reset = () => {
+    setStudent("");
+    setInterviewer(null);
+    setError("");
+  }
 
   // when cancelling, also reset the form fields first before props.onCancel
   const cancel = () => { 
-    setStudent("");
-    setInterviewer(null);
+    reset();
     props.onCancel();
   }
 
