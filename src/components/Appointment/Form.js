@@ -32,7 +32,10 @@ export default function Form(props) {
       setError("Please select an interviewer")
       return;
     }
-    // else we just run our old save function, aka the props.onSave passed down
+    
+    // due to new bug from testing, need to clear previous errors if there was one, before saving valid form input
+    setError("");
+    // THEN run our old save function, aka the props.onSave passed down
     props.onSave(student, interviewer);
   }
 
