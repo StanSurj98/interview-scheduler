@@ -78,9 +78,6 @@ describe("Application Tests", () => {
 
 
   it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
-    // pretty similar plan to the above test for booking an interview
-    // have to make an axios mock as well
-
     const { container, debug } = render(<Application />);
 
     // wait for init render until the archie appointment appears on screen
@@ -94,8 +91,6 @@ describe("Application Tests", () => {
     
     // expect that the confim box shows up
     expect(getByText(appointment, /do you want to delete*/i)).toBeInTheDocument();
-    // confidence check for this mode 
-    // expect(queryByText(appointment, /do you want to delete*/i)).not.toBeInTheDocument();
 
     // click confirm button which will trigger axios, update our mock for delete
     fireEvent.click(getByText(appointment, "Confirm"));
@@ -109,9 +104,5 @@ describe("Application Tests", () => {
     // need to now look to see for 2 spots remaining in <DayList /> for "Monday"
     const day = getAllByTestId(container, "day").find( day => queryByText(day, "Monday"));
     expect(queryByText(day, /2 spots remaining/i)).toBeInTheDocument();
-    // expect(queryByText(day, /2 spots remaining/i)).not.toBeInTheDocument();
-    // confidence check
-    
-
   });
 });
