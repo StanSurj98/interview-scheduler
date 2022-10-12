@@ -16,6 +16,8 @@ import {
   queryByAltText,
 } from "@testing-library/react";
 
+import axios from "axios";
+
 import Application from "components/Application";
 
 afterEach(cleanup);
@@ -138,5 +140,44 @@ describe("Application Tests", () => {
     // debug()
   });
 
-  
+
+  it("shows the save error when failing to save an appointment", async () => {
+
+    // same as prev tests, except axios fails once here
+    const {container, debug} = render(<Application />);
+
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+
+    // empty first slot
+    const appointment = getAllByTestId(container, "appointment")[0];
+
+    fireEvent.click(getByAltText(appointment, "Add"));
+
+    fireEvent.change(
+      getByPlaceholderText(appointment, /enter student name/i),
+      { target: { value: "Lydia Miller-Jones" } }
+    );
+
+    fireEvent.click(getByAltText(appointment, /sylvia palmer/i));
+
+    // this just reverses the resolved promise form our mock to a reject once
+    axios.put.mockRejectedValueOnce();
+    // try to submit save, but should error out
+    fireEvent.click(getByText(appointment, /save/i));
+    
+    // await the error promise as usual
+    await waitForElement(() => getByText(appointment, "Error"))
+
+    // check the x button goes back to appointment form 
+    fireEvent.click(queryByAltText(container, "Close"));
+
+    // check that we see the empty form again
+    expect(
+      getByPlaceholderText(appointment, /enter student name/i)
+    ).toBeInTheDocument();
+
+    debug(container);
+
+  });
+
 });
