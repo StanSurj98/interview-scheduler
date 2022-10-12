@@ -58,12 +58,11 @@ describe("Application Tests", () => {
 
     // 4. submit the form to save
     fireEvent.click(getByText(appointment, /save/i));
-    // console.log(prettyDOM(appointment));
+    // this debug() comes from the render output too
     debug();
     // 5. expect <Appointment /> shows our SAVING mode, "Booking interview..."
     expect(getByText(appointment, /booking interview.../i)).toBeInTheDocument();
-    // if we're unsure whether or not the above line is actually working, check the opposite! see what happens, NOT to be in document, should fail!
-    expect(getByText(appointment, /booking interview.../i)).not.toBeInTheDocument();
+
 
 
 
