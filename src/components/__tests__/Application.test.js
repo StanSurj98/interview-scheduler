@@ -11,13 +11,20 @@ import Application from "components/Application";
 
 afterEach(cleanup);
 
-it("defaults to Monday and changes the schedule when a new day is selected", () => {
+
+
+
+
+
+
+
+it("defaults to Monday and changes the schedule when a new day is selected", async () => {
   const { getByText } = render(<Application />);
 
-  // Here we're waiting until the DOM has an element with the text "Monday"
-  // waitForElement(cb) returns a promise that resolves when cb is truthy, and rejects after a timeout when it can't find it
-  return waitForElement(() => getByText("Monday")).then(() => {
-    fireEvent.click(getByText("Tuesday"));
-    expect(getByText("Leopold Silvers")).toBeInTheDocument();
-  });
+  // Using Async Await to do this function test now
+  await waitForElement(() => getByText("Monday"));
+  // Notice how we don't need a .then() anymore
+  fireEvent.click(getByText("Tuesday"));
+  expect(getByText("Leopold Silvers")).toBeInTheDocument();
+  // Accomplishes the same thing still, wait for a DOM Node with "Monday", then execute click event on DOM node with "Tuesday" and then expect the name to show up somewhere on the page
 });
