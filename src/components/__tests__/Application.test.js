@@ -51,19 +51,20 @@ describe("Application Tests", () => {
 
     // 2. fill student form, target placeholder, remember { target { value: } }
     fireEvent.change(getByPlaceholderText(appointment, /enter student name/i),
-    { target: { value: "Stanley Surjanto" } });
+    { target: { value: "Lydia Miller-Jones" } });
 
     // 3. click interviewer
     fireEvent.click(getByAltText(appointment, /sylvia palmer/i));
 
     // 4. submit the form to save
     fireEvent.click(getByText(appointment, /save/i));
-    // this debug() comes from the render output too
-    debug();
+
     // 5. expect <Appointment /> shows our SAVING mode, "Booking interview..."
     expect(getByText(appointment, /booking interview.../i)).toBeInTheDocument();
 
-
+    // 6. next check SHOW mode after saving done, ideally axios works
+    await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
+    debug();
 
 
   });
