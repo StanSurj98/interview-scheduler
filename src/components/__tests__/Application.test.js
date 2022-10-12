@@ -110,4 +110,33 @@ describe("Application Tests", () => {
   });
 
 
+  it("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
+    const {container, debug} = render(<Application />);
+    // wait for interview appointment to show
+    await waitForElement(() => getByText(container, "Archie Cohen"));
+    // click edit button
+    const appointment = getAllByTestId(container, "appointment").find(
+      appointment => queryByText(appointment, "Archie Cohen")
+    );
+    fireEvent.click(queryByAltText(appointment, "Edit"));
+    // expect the form to show up 
+    expect(getByPlaceholderText(appointment, /enter student name/i)).toBeInTheDocument();
+    // update form value
+    fireEvent.change(getByPlaceholderText(appointment, /enter student name/i),
+    { target: { value: "Lydia Miller-Jones" } });
+    // click save
+    fireEvent.click(getByText(appointment, /save/i));
+    // check for saving mode pop up
+    expect(queryByText(appointment, /booking interview.../i)).toBeInTheDocument();
+    // check to see appointment is still there with new name
+    await waitForElement(() => queryByText(appointment, "Lydia Miller-Jones"));
+    // check that monday still has same spots remaining
+    const monday = getAllByTestId(container, "day").find(
+      day => queryByText(day, "Monday")
+    );
+    expect(getByText(monday, /1 spot remaining/i)).toBeInTheDocument();
+    // debug()
+  });
+
+  
 });
