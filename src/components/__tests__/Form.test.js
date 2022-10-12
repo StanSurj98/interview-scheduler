@@ -78,55 +78,8 @@ describe("Form Component", () => {
   });
   
 
-  // it("calls onSave function when the name is defined", () => {
-  //   /* 1. create the mock onSave fn */
-  //   const onSave = jest.fn();
-
-  //   /* 2. Render the Form with interviewers, student name and the onSave mock function passed as an onSave prop */
-  //   const {queryByText, getByText} = render(
-  //     <Form 
-  //       interviewers={interviewers} 
-  //       /* Make sure you read what the onSave func does from <Appointment /> passed to <Form />, in our case, takes the interviewer ID */
-  //       interviewer={interviewers[0].id}
-  //       student="Lydia Miller-Jones" 
-  //       onSave={onSave} 
-  //     /> 
-  //   );
-
-  //   /* 3. Click the save button */
-  //   fireEvent.click(getByText("Save"));
-
-    
-  //   // Expectations
-  //   // We shouldn't get our error messages (at this point haven't built them)
-  //   expect(queryByText(/student name cannot be blank/i)).toBeNull();
-  //   expect(queryByText(/please select an interviewer/i)).toBeNull();
-  //   expect(onSave).toHaveBeenCalledTimes(1);
-  //   expect(onSave).toHaveBeenCalledWith("Lydia Miller-Jones", 1);
-  // });
-
-
-  // it("submits the name entered by the user", () => {
-  //   // 1. mock func
-  //   const onSave = jest.fn();
-  //   // 2. pass the necessary props without the name yet
-  //   const { getByText, getByPlaceholderText } = render(
-  //     <Form interviewers={interviewers} onSave={onSave} interviewer={1} />
-  //   );
-  //   // 3. clarify that our input will be the student name box
-  //   const input = getByPlaceholderText("Enter Student Name");
-  //   // 4. fire the events required, in this case, valid student + click save
-  //   fireEvent.change(input, { target: { value: "Lydia Miller-Jones" } });
-  //   fireEvent.click(getByText("Save"));
-  
-  //   // Expectations - we know that this is happy path, so onSave should be called
-  //   expect(onSave).toHaveBeenCalledTimes(1);
-  //   expect(onSave).toHaveBeenCalledWith("Lydia Miller-Jones", 1);
-  // });
-
-
+  // This test replaces the two tests it overlaps with previously 
   it("can successfully save after trying to submit an empty student name", () => {
-    // This test replaces the two tests it overlaps with previously 
     // 1. mock func && render with appropriate props, in this case no student
     const onSave = jest.fn();
     const { getByText, getByPlaceholderText, queryByText } = render(
