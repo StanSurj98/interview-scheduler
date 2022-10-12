@@ -26,32 +26,30 @@ describe("Application Tests", () => {
 
     // Using Async Await to do this function test now
     await waitForElement(() => getByText("Monday"));
-    // Notice how we don't need a .then() anymore
     fireEvent.click(getByText("Tuesday"));
     expect(getByText("Leopold Silvers")).toBeInTheDocument();
-    // Accomplishes the same thing still, wait for a DOM Node with "Monday", then execute click event on DOM node with "Tuesday" and then expect the name to show up somewhere on the page
   });
 
 
   it("loads data, books an interview and reduces the spots remaining for the first day by 1", async () => {
-    // Using Scoped queries for this test, we imported getBy... up there instead
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
     
-    // Notice our queries are imported out of scope, must define WHICH container
+    // Note => queries imported outside this scope, must define WHICH container
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
-    // testIDs, get ALL appointments in container, returns array of <articles>
+    // testIDs, returns array of <Appointment /> <articles>
     const appointments = getAllByTestId(container, "appointment")
 
-    // access a specific node in that array, check prev commit for other ways
+    // access specific node in array, check prev commit for other ways
     const appointment = appointments[0];
 
+    
     // Next, the events to add and book an appointment
     
     // 1. click plus button, target alt text, in scope of first appointment
     fireEvent.click(getByAltText(appointment, "Add"));
 
-    // 2. fill student form, target placeholder, remember { target { value: } }
+    // 2. fill student form, target placeholder, !remember! { target { value: } }
     fireEvent.change(getByPlaceholderText(appointment, /enter student name/i),
     { target: { value: "Lydia Miller-Jones" } });
 
@@ -61,20 +59,18 @@ describe("Application Tests", () => {
     // 4. submit the form to save
     fireEvent.click(getByText(appointment, /save/i));
 
-    // 5. expect <Appointment /> shows our SAVING mode, "Booking interview..."
+    // 5. expect <Appointment /> shows SAVING mode, "Booking interview..."
     expect(getByText(appointment, /booking interview.../i)).toBeInTheDocument();
 
-    // 6. next check SHOW mode after saving done, ideally axios works
+    // 6. on success, transitions to SHOW mode
     await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
-    // debug();
 
-    // 7. in mock axios, monday has 1 spot, once we create the above, need to check the nav bar, that "Monday" <DayListItem /> shows 0 spots left
+    // 7. in mock, monday has 1 spot, on success need to check that "Monday" <DayListItem /> shows 0 spots left
     
-    // Remember => getAllByTestId returns array of all day items, .find(the day that has "Monday" as a text on the screen)
+    // !! Note !! use queryBy..., because it's looping through the array
     const day = getAllByTestId(container, "day").find(day =>
-      // !! MUST !! use queryBy... here, since it's looping through the array
+      // don't want error if can't find on first iteration, need to keep looping
       queryByText(day, "Monday")
-      // if it doesn't find "Monday" on the first try, say it was "Tuesday", we don't want to just error the test, we want to keep going
     );
     expect(queryByText(day, /no spots remaining/i)).toBeInTheDocument();
 
