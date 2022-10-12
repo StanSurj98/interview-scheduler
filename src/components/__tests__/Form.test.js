@@ -104,4 +104,23 @@ describe("Form Component", () => {
     expect(onSave).toHaveBeenCalledTimes(1);
     expect(onSave).toHaveBeenCalledWith("Lydia Miller-Jones", 1);
   });
+
+
+  it("submits the name entered by the user", () => {
+    // 1. mock func
+    const onSave = jest.fn();
+    // 2. pass the necessary props without the name yet
+    const { getByText, getByPlaceholderText } = render(
+      <Form interviewers={interviewers} onSave={onSave} interviewer={1} />
+    );
+    // 3. clarify that our input will be the student name box
+    const input = getByPlaceholderText("Enter Student Name");
+    // 4. fire the events required, in this case, valid student + click save
+    fireEvent.change(input, { target: { value: "Lydia Miller-Jones" } });
+    fireEvent.click(getByText("Save"));
+  
+    // Expectations - we know that this is happy path, so onSave should be called
+    expect(onSave).toHaveBeenCalledTimes(1);
+    expect(onSave).toHaveBeenCalledWith("Lydia Miller-Jones", 1);
+  });
 });
