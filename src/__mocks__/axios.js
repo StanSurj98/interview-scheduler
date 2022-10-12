@@ -66,6 +66,7 @@ const fixtures = {
 // Notice, we conditionally check the URL for the request, and give back the hardcoded version of what we usually would get back from the request using Axios
 // Note the resolved promises as a return as well!!
 export default {
+  dafaults: { baseURL: "http://localhost:8001" },
   get: jest.fn((url) => {
     if (url === "/api/days") {
       return Promise.resolve({
@@ -75,7 +76,7 @@ export default {
       });
     }
 
-    if (url === "api/appointments") {
+    if (url === "/api/appointments") {
       // resolve apt data
       return Promise.resolve({
         status: 200,
@@ -84,7 +85,7 @@ export default {
       });
     }
 
-    if (url === "api/interviews") {
+    if (url === "/api/interviewers") {
       // resolve interviewers data
       return Promise.resolve({
         status: 200,
@@ -92,5 +93,7 @@ export default {
         data: fixtures.interviewers,
       });
     }
+
+    
   }),
 };
