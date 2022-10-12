@@ -4,6 +4,8 @@ import {
   getByText,
   getAllByTestId,
   getByAltText,
+  getByRole,
+  queryByText,
   prettyDOM,
   render,
   cleanup,
@@ -64,7 +66,17 @@ describe("Application Tests", () => {
 
     // 6. next check SHOW mode after saving done, ideally axios works
     await waitForElement(() => getByText(appointment, "Lydia Miller-Jones"));
-    debug();
+    // debug();
+
+    // 7. in mock axios, monday has 1 spot, once we create the above, need to check the nav bar, that "Monday" <DayListItem /> shows 0 spots left
+    
+    // Remember => getAllByTestId returns array of all day items, .find(the day that has "Monday" as a text on the screen)
+    const day = getAllByTestId(container, "day").find(day =>
+      // !! MUST !! use queryBy... here, since it's looping through the array
+      queryByText(day, "Monday")
+      // if it doesn't find "Monday" on the first try, say it was "Tuesday", we don't want to just error the test, we want to keep going
+    );
+    expect(queryByText(day, /no spots remaining/i)).toBeInTheDocument();
 
 
   });
