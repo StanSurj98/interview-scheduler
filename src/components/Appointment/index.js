@@ -35,6 +35,7 @@ export default function Appointment(props) {
   // ----- Functions -----
   // 
 
+  // Called by props.onSave in <Form />, receiving the student and interviewer
   const save = (name, interviewer) => {
     
     const interview ={

@@ -3,26 +3,41 @@ import Button from "components/Button";
 import InterviewerList from "components/InterviewerList";
 
 export default function Form(props) {
-  // We need a blank default if no student props passed down, AKA we're entering our name into the form for the first time
-  // HOWEVER - if we're EDITING our form, we want the existing value to be props.student
+  // student is the name on form, initial is blank OR existing from prev entry
   const [student, setStudent] = useState(props.student || "");
-  // My DEFAULT is props.{student/interviewer} if truthy or ""/null 
+  // interviewer should null on initial form, otherwise the prev chosen person
   const [interviewer, setInterviewer] = useState(props.interviewer || null);
+  // error state for form validation, empty at start or pop up msg
+  const [error, setError] = useState("")
 
-  // Function to reset form field and interviewer select
-  const reset = () => {
+
+  // when cancelling, also reset the form fields first before props.onCancel
+  const cancel = () => { 
     setStudent("");
     setInterviewer(null);
-  }
-  const cancel = () => {
-    reset();
     props.onCancel();
   }
 
-  // Temp func for onSave right now
-  const save = () => {
+  // 
+  // ----- Validate Func -----
+  // 
+
+  const validate = () => {
+    // Pops error on empty name input
+    if (student === "") {
+      setError("Student name cannot be blank");
+      return;
+    }
+    if (interviewer === null) {
+      setError("Please select an interviewer")
+      return;
+    }
+    // else we just run our old save function, aka the props.onSave passed down
     props.onSave(student, interviewer);
   }
+
+
+
 
 
   return (
@@ -41,7 +56,10 @@ export default function Form(props) {
             value={student}
             // this onChange allow us to see irl the effects of typing, re-renders each char
             onChange={(e) => setStudent(e.target.value)}
+            // adding this for Jest Testing purposes, trying out id
+            data-testid="student-name-input" 
           />
+          <section className="appointment__validation">{error}</section>
         </form>
         <InterviewerList 
           // pass in the interviewers array so it can render each list item
@@ -55,7 +73,7 @@ export default function Form(props) {
       <section className="appointment__card-right">
         <section className="appointment__actions">
           <Button danger onClick={cancel}>Cancel</Button>
-          <Button confirm onClick={save}>Save</Button>
+          <Button confirm onClick={validate}>Save</Button>
         </section>
       </section>
     </main>
