@@ -4,31 +4,26 @@ import "components/Application.scss";
 // Components
 import DayList from "./DayList";
 import Appointment from "components/Appointment";
-// import "components/Appointment";
 // Helpers
 import {
   getAppointmentsForDay,
   getInterview,
   getInterviewersForDay,
 } from "../helpers/selectors";
-import useApplicationData from "../hooks/useApplicationData"
+// Custom Hooks
+import useApplicationData from "../hooks/useApplicationData";
 
 export default function Application(props) {
   //
   // ----- States and State Functions -----
   //
-  const {state, setDay, bookInterview, cancelInterview} = useApplicationData();
+  const { state, setDay, bookInterview, cancelInterview } =
+    useApplicationData();
 
-
-  // Find all appointments for the current "day" state
   const dailyAppointments = getAppointmentsForDay(state, state.day);
-
-  // All interviewers for day, to select pictures during <Form /> entry
   const dailyInterviewers = getInterviewersForDay(state, state.day);
 
-  
-
-  // Mapping each <Appointment /> from dailyAppointments array of apt. objs.
+  // Maps each <Appointment /> components
   const schedule = dailyAppointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
 
@@ -43,9 +38,7 @@ export default function Application(props) {
         cancelInterview={cancelInterview}
       />
     );
-
   });
-
 
   //
   // ----- JSX Template -----
@@ -61,13 +54,7 @@ export default function Application(props) {
         />
         <hr className="sidebar__separator sidebar--centered" />
         <nav className="sidebar__menu">
-          <DayList
-            // Making sure we pass down the state object data
-            days={state.days}
-            value={state.day}
-            // setDay for selecting <DayListItem /> and change day state up here
-            onChange={setDay}
-          />
+          <DayList days={state.days} value={state.day} onChange={setDay} />
         </nav>
         <img
           className="sidebar__lhl sidebar--centered"
@@ -76,9 +63,9 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {/* Populate the daily schedules with each <Appointment /> */}
+        {/* Renders list of <Appointment /> */}
         {schedule}
-        {/* Hard code the last appointment slot that is always unavailable */}
+        {/* Hard code last appointment slot, always unavailable */}
         <Appointment key="last" time="5pm" />
       </section>
     </main>

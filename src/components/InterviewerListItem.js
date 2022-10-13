@@ -1,9 +1,10 @@
 import React from "react";
 import "components/InterviewerListItem.scss";
-import classNames from "classnames"; // Library for classnames management
+// Library for managing class names
+import classNames from "classnames"; 
 
 export default function InterviewerListItem(props) {
-  // Conditionally adding classes if props.selected is truthy
+  // Conditionally adds classes if interviewer was selected
   const interviewerClass = classNames({
     "interviewers__item": true,
     "interviewers__item--selected": props.selected,
@@ -12,14 +13,13 @@ export default function InterviewerListItem(props) {
   return (
     <li 
     className={interviewerClass}
-    // with the recent change, onClick, we already have a func definition for setInterviewer
     onClick={props.setInterviewer}>
       <img 
       className="interviewers__item-image"
       src={props.avatar}
       alt={props.name}
       />
-      {/* conditionally display name ONLY if props.selected is truthy */}
+      {/* Only display full name when selected */}
       {props.selected && props.name}
     </li>
   );

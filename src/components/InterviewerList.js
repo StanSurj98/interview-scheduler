@@ -1,22 +1,19 @@
 import React from "react";
 import InterviewerListItem from "./InterviewerListItem";
 import "components/InterviewerList.scss";
-// Testing out PropTypes library
+// Library for Props type assertion
 import PropTypes from "prop-types";
 
 
 const InterviewerList = (props) => {
-  // <InterviewerList /> receives interviewers:array, setInterviewer:func, interviewer:num
-  // interviewer:num is the currently selected interviewer (it's our state)
+  // From array of interviewers, map each interviewer component
   const interviewers = props.interviewers.map((interviewer) => {
     return (
       <InterviewerListItem 
       key={interviewer.id} 
       name={interviewer.name} 
       avatar={interviewer.avatar}
-      // just changed name to value since last git commit
       selected={props.value === interviewer.id}
-      // also changed to onChange here
       setInterviewer={() => props.onChange(interviewer.id)}
       />
     );
@@ -26,7 +23,7 @@ const InterviewerList = (props) => {
   return (
     <section className="interviewers">
       <h4 className="interviewers__header text--light">Interviewer</h4>
-      {/* Want to render a list of <InterviewerListItem /> components */}
+      {/* Renders list of interviewers */}
       <ul className="interviewers__list">{interviewers}</ul>
     </section>
   );
@@ -37,6 +34,5 @@ InterviewerList.propTypes = {
   interviewers: PropTypes.array.isRequired
 };
 
-// We can use prop-types as a baby TypeScript-ish library to assert types and avoid errors earlier
 
 export default InterviewerList;
