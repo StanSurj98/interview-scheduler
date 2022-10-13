@@ -1,13 +1,12 @@
 describe("Appointments Tests", () => {
+  // Keeping it DRY, reset DB, visit site & wait for render each time
   beforeEach(() => {
-    // Keeping it DRY, reset DB, visit site & wait for render each time
     cy.request("GET", "/api/debug/reset");
     cy.visit("/");
     cy.contains("Monday");
   });
 
-  xit("should book an interview", () => {
-    // click on the + button with alt=Add
+  it("should book an interview", () => {
     cy.get("[alt='Add']")
       .first()
       .click();
@@ -17,13 +16,13 @@ describe("Appointments Tests", () => {
     cy.get("[alt='Sylvia Palmer']").click();
     cy.contains("Save").click();
 
-    // verify that SHOW mode, displays name && interviewer
+    // verify SHOW component, displays name && interviewer
     cy.contains(".appointment__card--show", "Lydia Miller-Jones");
     cy.contains(".appointment__card--show", "Sylvia Palmer");
   });
 
-  xit("should edit an interview", () => {
-    // The edit and delete buttons are both hidden unless hovered, use force click
+  it("should edit an interview", () => {
+    // Edit and Delete buttons both hidden unless hovered, use force click
     cy.get("[alt='Edit']")
       .first()
       .click({ force: true });
@@ -47,11 +46,11 @@ describe("Appointments Tests", () => {
 
     cy.contains("Confirm").click();
 
-    // Let's make sure the status elm shows
+    // Ensuring status appears then disappears on success
     cy.get("[alt='Loading']").should("exist");
     cy.get("[alt='Loading']").should("not.exist");
 
-    // Lastly, check that the appointment card that shows Archie doesn't exist
+    // Check that the correct appointment has been deleted
     cy.contains(".appointment__card--show", "Archie Cohen")
       .should("not.exist");
   });

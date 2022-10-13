@@ -3,19 +3,11 @@ describe("Navigation", () => {
     cy.visit("/");
   });
 
-
   it("should navigate to Tuesday", () => {
     cy.visit("/");
-    
-    // updating this to use the data-testid="day"
-    cy.contains('[data-testid=day]', "Tuesday")
+
+    cy.contains("[data-testid=day]", "Tuesday")
       .click()
-      .should("have.class", "day-list__item--selected")
-  })
-  
-
-
-
-
+      .should("have.class", "day-list__item--selected");
+  });
 });
-
