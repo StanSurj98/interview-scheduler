@@ -8,7 +8,7 @@ afterEach(cleanup);
 
 describe("Appointment Component", () => {
   
-  xit("renders without crashing", () => {
+  it("renders without crashing", () => {
     render(<Appointment />);
   });
 

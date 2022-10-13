@@ -1,9 +1,7 @@
 /* 
   
-This is a mock Module file, it will simulate all of our axios during jest
-
-Below are Fixtures - Static Files that are FROM the real API but set in stone here
-Jest will automatically replace any axios import with this mock module instead
+This is a mock Module file, it simulates all of our axios requests during jest
+Below are Fixtures - Static Files from a portion of the real API 
 
 */
 
@@ -62,9 +60,7 @@ const fixtures = {
   },
 };
 
-// Here we're just returning an object that would emulate exactly how Axios works
-// Notice, we conditionally check the URL for the request, and give back the hardcoded version of what we usually would get back from the request using Axios
-// Note the resolved promises as a return as well!!
+// Mocking returns to mimic real axios response, always as promises
 export default {
   dafaults: { baseURL: "http://localhost:8001" },
   get: jest.fn((url) => {
@@ -77,7 +73,6 @@ export default {
     }
 
     if (url === "/api/appointments") {
-      // resolve apt data
       return Promise.resolve({
         status: 200,
         statusText: "OK",
@@ -86,7 +81,6 @@ export default {
     }
 
     if (url === "/api/interviewers") {
-      // resolve interviewers data
       return Promise.resolve({
         status: 200,
         statusText: "OK",
@@ -98,12 +92,12 @@ export default {
     return Promise.resolve({
       status: 204,
       statusText: "No Content",
-    })
+    });
   }),
   delete: jest.fn(() => {
     return Promise.resolve({
-      status: 204, 
+      status: 204,
       statusText: "No Content",
-    })
-  })
+    });
+  }),
 };
